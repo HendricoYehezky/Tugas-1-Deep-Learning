@@ -39,3 +39,55 @@ torch.randn(3, 4)
 
 ### Kita juga dapat membuat setiap elemen dalam tensor dalam bentuk tensor juga, yang ditunjukkan sbagai berikut ###
 torch.tensor([[2,1,4,3],[1,2,3,4],[4,3,2,1]])
+
+### Berikutnya juga terdapat operasi diantaranya ada operasi unary scalar dan binary scalar serta juga disertai operator aritmatika untuk melakukan operasi terhadap elemen-elemen didalamnya###
+x = torch.tensor([1.0, 2, 4, 8])
+y = torch.tensor([2, 2, 2, 2])
+x + y, x - y, x * y, x / y, x ** y
+
+### Eksponensiasi juga dapat dimasukkan ke dalam kelompok operator unary ketika kita melakukan proses perkalian element-wise yaitu perkalian yang didapatkan dari penjumlahan antar elemen baris dengan elemen kolom yang bersesuaian ###
+torch.exp(x)
+
+### Perkalian element-wise yang melibatkan perkalian dot produk ataupun perkalian matrisks juga dapat dibuat secara concatenate yaitu mengabungkan elemen-elemen setelah dilakukan proses perkalian menjadi sebuah matriks baru tentunya dapat ditunjukkan sebagai berikut ###
+X = torch.arange(12, dtype=torch.float32).reshape((3,4))
+Y = torch.tensor([[2.0, 1, 4, 3], [1, 2, 3, 4], [4, 3, 2, 1]])
+torch.cat((X, Y), dim=0), torch.cat((X, Y), dim=1)
+
+### Dalam kondisi tertentu, kita dapat menyusun susunan angka di dalam sebuah tensor ke dalam satu kolom atau satu baris ###
+a = torch.arange(3).reshape((3, 1))
+b = torch.arange(2).reshape((1, 2))
+a, b
+
+### karena dimensi tensor a dan b berbeda, maka bentuk mereka tidak akan dapat dibuat penjumlahannya, namun dalam operator penjumlahan di torch, program akan mengasumsikan kedua matriks tersebut dapat disesuaikan dimensinya dengan mereplikasikan kolom dan barisnya sehingga dapat dijumlahkan ###
+a + b
+
+### Dalam susunan array yang dikenal oleh bahasa program Python, kita dapat mengakses sebuah matriks atau tensor dengan menyebutkan komponen yang akan dipilih ###
+### X[-1] mengartikan kita memilih elemen-elemen terakhir dalam sebuah matriks ###
+### X[1:3] mengartikan kita memilih elemen-elemen kedua dan ketiga ###
+X[-1], X[1:3]
+
+### Sebelum program membaca datam kita dapat menuliskan data dalam matriksnya sesuai dengan indeks yang diberikan ###
+X[1, 2] = 9
+X
+
+### Dalam menjalankan operator terhadap data yang disimpan dalam memory, maka pada umumnya hasi operasi tersebut akan dialokasikan ke dalam memory yang baru ###
+### Dalam pengecekan apakah hasil operator tersebut akan dialokasikan ke memory yang baru atau tidak, kita dapat mengeceknya dengan modul berikut ###
+before = id(Y)
+Y = Y + X
+id(Y) == before
+
+### Pengecekan tersebut sangat bermanfaat apabila kita mengaplikasikan pembelajaran mesin yang mungkin membutuhkan ratusan megabyte untuk mengenal parameter dan melakukan update dengan perkalian untuk setiap detiknya ###
+### Sebagai ilustrasi, kita akan membuat sebuah matriks baru Z yang memiliki bentuk yang sama dengan matriks Y, dengan menggunakan zeros_like untuk mengalokasikan blok dengan entri 0 di dalamnya ####
+Z = torch.zeros_like(Y)
+print('id(Z):', id(Z))
+Z[:] = X + Y
+print('id(Z):', id(Z))
+
+### Mengkonversi objek yang ada dalam python (Torch) yang dapat berupa tensor dalam torch atau array dalam numpy sehingga dapat memaksimalkan performa manipulasi data dengan baik ###
+A = X.numpy()
+B = torch.from_numpy(A)
+type(A), type(B)
+
+### Untuk mengubah sebuah tensor dengan ukuran 1 kedalam skalar, kita dapat menggunakan fungsi sebagai berikut ###
+a = torch.tensor([3.5])
+a, a.item(), float(a), int(a)
